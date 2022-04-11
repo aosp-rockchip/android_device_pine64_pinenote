@@ -16,11 +16,27 @@
 
 ## Inherit from generic products, most specific first
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, device/rockchip/rk356x/rk3566_eink/rk3566_eink.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+
+# Inherit PineNote device
+$(call inherit-product, device/pine64/pinenote/device.mk)
+
+# Inherit some common Lineage stuff
 $(call inherit-product, vendor/lineage/config/common_full_tablet_wifionly.mk)
 
+# Device identifier. This must come after all inclusions.
 PRODUCT_NAME := lineage_pinenote
+PRODUCT_DEVICE := pinenote
 PRODUCT_BRAND := pine64
 PRODUCT_MODEL := PineNote
+PRODUCT_MANUFACTURER := Pine64
 
-TARGET_VENDOR := pine64
+PRODUCT_SYSTEM_NAME := PineNote
+PRODUCT_SYSTEM_DEVICE := PineNote
+
+PRODUCT_AAPT_CONFIG := xhdpi
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
+
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1872
+TARGET_SCREEN_WIDTH := 1404
