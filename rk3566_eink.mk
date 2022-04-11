@@ -35,28 +35,13 @@ DEVICE_PACKAGE_OVERLAYS := device/rockchip/common/overlay $(LOCAL_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
-PRODUCT_NAME := rk3566_eink
-PRODUCT_DEVICE := rk3566_eink
-PRODUCT_BRAND := rockchip
-PRODUCT_MODEL := rk3566_eink
-PRODUCT_MANUFACTURER := rockchip
-PRODUCT_AAPT_PREF_CONFIG := mdpi
-
 PRODUCT_KERNEL_CONFIG += rk356x_eink.config
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/eink_logo/poweroff_logo/poweroff.png:$(TARGET_COPY_OUT_VENDOR)/media/poweroff.png \
-    $(LOCAL_PATH)/eink_logo/poweroff_logo/poweroff_nopower.png:$(TARGET_COPY_OUT_VENDOR)/media/poweroff_nopower.png \
-    $(LOCAL_PATH)/eink_logo/standby_logo/standby.png:$(TARGET_COPY_OUT_VENDOR)/media/standby.png \
-    $(LOCAL_PATH)/eink_logo/standby_logo/standby_lowpower.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_lowpower.png \
-    $(LOCAL_PATH)/eink_logo/standby_logo/standby_charge.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_charge.png \
-    $(LOCAL_PATH)/eink_logo/android_logo/bootanimation.zip:$(TARGET_COPY_OUT_ODM)/media/bootanimation.zip \
     $(LOCAL_PATH)/android.software.eink.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.eink.xml
 
 PRODUCT_PACKAGES += \
-    NoNavigationBarModeGestural \
-    NoteDemo
-
+    NoNavigationBarModeGestural
 #
 ## add Rockchip properties
 #

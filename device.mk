@@ -4,11 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-$(call inherit-product, device/rockchip/rk356x/rk3566_eink/rk3566_eink.mk)
-
-
-BOARD_HAVE_BLUETOOTH_RTK := false
+$(call inherit-product, $(LOCAL_PATH)/rk3566_eink.mk)
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
+
+TARGET_ROCKCHIP_PCBATEST := false
