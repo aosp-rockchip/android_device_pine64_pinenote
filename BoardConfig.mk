@@ -1,4 +1,4 @@
-include device/rockchip/rk356x/rk3566_eink/BoardConfig.mk
+include device/rockchip/rk356x/BoardConfig.mk
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 BUILD_WITH_GO_OPT := true
