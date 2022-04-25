@@ -20,7 +20,7 @@ PRODUCT_DTBO_TEMPLATE := $(LOCAL_PATH)/dt-overlay.in
 PRODUCT_SDMMC_DEVICE := fe2b0000.dwmmc
 
 include device/rockchip/common/build/rockchip/DynamicPartitions.mk
-include device/rockchip/rk356x/rk3566_eink/BoardConfig.mk
+include device/pine64/pinenote/BoardConfig.mk
 include device/rockchip/common/BoardConfig.mk
 
 PRODUCT_COPY_FILES += \
@@ -36,7 +36,7 @@ DEVICE_PACKAGE_OVERLAYS := device/rockchip/common/overlay $(LOCAL_PATH)/overlay
 PRODUCT_CHARACTERISTICS := tablet
 
 PRODUCT_NAME := aosp_pinenote
-PRODUCT_DEVICE := PineNote
+PRODUCT_DEVICE := pinenote
 PRODUCT_BRAND := Pine64
 PRODUCT_MODEL := rk3566_eink
 PRODUCT_MANUFACTURER := rockchip
