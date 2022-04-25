@@ -35,9 +35,9 @@ DEVICE_PACKAGE_OVERLAYS := device/rockchip/common/overlay $(LOCAL_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
-PRODUCT_NAME := rk3566_eink
-PRODUCT_DEVICE := rk3566_eink
-PRODUCT_BRAND := rockchip
+PRODUCT_NAME := aosp_pinenote
+PRODUCT_DEVICE := PineNote
+PRODUCT_BRAND := Pine64
 PRODUCT_MODEL := rk3566_eink
 PRODUCT_MANUFACTURER := rockchip
 PRODUCT_AAPT_PREF_CONFIG := mdpi
