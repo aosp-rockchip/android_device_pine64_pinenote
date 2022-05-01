@@ -28,7 +28,7 @@ ifeq ($(strip $(BOARD_USES_AB_IMAGE)), true)
     TARGET_RECOVERY_FSTAB := device/rockchip/rk356x/rk3566_eink/recovery.fstab_AB
 endif
 PRODUCT_UBOOT_CONFIG := rk3566-eink
-PRODUCT_KERNEL_DTS := rk3566-rk817-eink-w103
+PRODUCT_KERNEL_DTS := rk3566-rk817-eink-pinenote
 PRODUCT_FSTAB_TEMPLATE := device/rockchip/rk356x/rk3566_eink/fstab_eink.in
 
 BOARD_GSENSOR_MXC6655XA_SUPPORT := true
