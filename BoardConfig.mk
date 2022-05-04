@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 include device/rockchip/rk356x/BoardConfig.mk
+-include device/pine64/pinenote-kernel/BoardConfigKernel.mk
 BUILD_WITH_GO_OPT := false
 
 # AB image definition

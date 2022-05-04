@@ -22,6 +22,7 @@ PRODUCT_SDMMC_DEVICE := fe2b0000.dwmmc
 include device/rockchip/common/build/rockchip/DynamicPartitions.mk
 include device/pine64/pinenote/BoardConfig.mk
 include device/rockchip/common/BoardConfig.mk
+-include device/pine64/pinenote-kernel/device-kernel.mk
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wake_lock_filter.xml:system/etc/wake_lock_filter.xml \
