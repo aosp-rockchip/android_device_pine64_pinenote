@@ -24,17 +24,9 @@ include device/pine64/pinenote/BoardConfig.mk
 include device/rockchip/common/BoardConfig.mk
 -include device/pine64/pinenote-kernel/device-kernel.mk
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wake_lock_filter.xml:system/etc/wake_lock_filter.xml \
-    $(LOCAL_PATH)/init.rk356x.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rk356x.rc
-
-$(call inherit-product, device/rockchip/rk356x/device.mk)
 $(call inherit-product, device/rockchip/common/device.mk)
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
-
-DEVICE_PACKAGE_OVERLAYS := device/rockchip/common/overlay $(LOCAL_PATH)/overlay
-
-PRODUCT_CHARACTERISTICS := tablet
+$(call inherit-product, device/pine64/pinenote/device.mk)
 
 PRODUCT_NAME := aosp_pinenote
 PRODUCT_DEVICE := pinenote
@@ -43,28 +35,4 @@ PRODUCT_MODEL := rk3566_eink
 PRODUCT_MANUFACTURER := rockchip
 PRODUCT_AAPT_PREF_CONFIG := mdpi
 
-PRODUCT_KERNEL_CONFIG += rk356x_eink.config
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/eink_logo/poweroff_logo/poweroff.png:$(TARGET_COPY_OUT_VENDOR)/media/poweroff.png \
-    $(LOCAL_PATH)/eink_logo/poweroff_logo/poweroff_nopower.png:$(TARGET_COPY_OUT_VENDOR)/media/poweroff_nopower.png \
-    $(LOCAL_PATH)/eink_logo/standby_logo/standby.png:$(TARGET_COPY_OUT_VENDOR)/media/standby.png \
-    $(LOCAL_PATH)/eink_logo/standby_logo/standby_lowpower.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_lowpower.png \
-    $(LOCAL_PATH)/eink_logo/standby_logo/standby_charge.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_charge.png \
-    $(LOCAL_PATH)/eink_logo/android_logo/bootanimation.zip:$(TARGET_COPY_OUT_ODM)/media/bootanimation.zip \
-    $(LOCAL_PATH)/android.software.eink.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.eink.xml
-
-PRODUCT_PACKAGES += \
-    NoNavigationBarModeGestural \
-    NoteDemo
-
-#
-## add Rockchip properties
-#
-PRODUCT_PROPERTY_OVERRIDES += ro.sf.lcd_density=320 \
-                              ro.vendor.eink=true \
-                              sys.eink.mode=7 \
-                              sys.eink.rgba2y4_by_rga=1 \
-                              persist.sys.idle-wakeup=false \
-                              persist.sys.idle-delay=5000 \
-                              sys.eink.recovery.eink_fb = true

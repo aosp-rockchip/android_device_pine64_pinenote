@@ -13,22 +13,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include device/rockchip/rk356x/BoardConfig.mk
 -include device/pine64/pinenote-kernel/BoardConfigKernel.mk
-BUILD_WITH_GO_OPT := false
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 :=
+TARGET_CPU_VARIANT := cortex-a55
+TARGET_CPU_SMP := true
 
-# AB image definition
-BOARD_USES_AB_IMAGE := false
-BOARD_ROCKCHIP_VIRTUAL_AB_ENABLE := false
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv8-2a
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := cortex-a55
 
-ifeq ($(strip $(BOARD_USES_AB_IMAGE)), true)
-    include device/rockchip/common/BoardConfig_AB.mk
-    TARGET_RECOVERY_FSTAB := device/rockchip/rk356x/rk3566_r/recovery.fstab_AB
-endif
+TARGET_BOARD_PLATFORM_PRODUCT := tablet
+
 PRODUCT_UBOOT_CONFIG := rk3566-eink
 PRODUCT_KERNEL_DTS := rk3566-rk817-eink-pinenote
-PRODUCT_FSTAB_TEMPLATE := device/rockchip/rk356x/rk3566_eink/fstab_eink.in
+PRODUCT_KERNEL_ARCH := arm64
+PRODUCT_FSTAB_TEMPLATE := device/pine64/pinenote/fstab_eink.in
 
+BUILD_EMULATOR := false
+TARGET_BOARD_PLATFORM := rk356x
+TARGET_BOARD_PLATFORM_GPU := mali-G52
+TARGET_RK_GRALLOC_VERSION := 4
+BOARD_USE_DRM := true
+
+# RenderScript
+BOARD_OVERRIDE_RS_CPU_VARIANT_32 := cortex-a55
+BOARD_OVERRIDE_RS_CPU_VARIANT_64 := cortex-a55
+
+TARGET_USES_64_BIT_BCMDHD := true
+TARGET_USES_64_BIT_BINDER := true
+
+# Sensors
+BOARD_SENSOR_ST := true
+BOARD_SENSOR_MPU_VR := false
+BOARD_SENSOR_MPU_PAD := false
+BOARD_USES_GENERIC_INVENSENSE := false
+
+ENABLE_CPUSETS := true
+
+BOARD_GRAVITY_SENSOR_SUPPORT := true
+BOARD_COMPASS_SENSOR_SUPPORT := false
+BOARD_GYROSCOPE_SENSOR_SUPPORT := false
+BOARD_PROXIMITY_SENSOR_SUPPORT := false
+BOARD_LIGHT_SENSOR_SUPPORT := false
+BOARD_PRESSURE_SENSOR_SUPPORT := false
+BOARD_TEMPERATURE_SENSOR_SUPPORT := false
+BOARD_USB_HOST_SUPPORT := true
 BOARD_USE_LAZY_HAL := true
 BOARD_GSENSOR_MXC6655XA_SUPPORT := true
 BOARD_CAMERA_SUPPORT := false
@@ -45,9 +79,32 @@ BUILD_WITH_CDROM := false
 BOARD_HS_ETHERNET := false
 BOARD_IS_SUPPORT_NTFS := false
 BOARD_SHOW_HDMI_SETTING := false
+BUILD_WITH_GO_OPT := false
+
+
+BOARD_SUPPORT_VP9 := true
+BOARD_SUPPORT_VP6 := false
+BOARD_SUPPORT_HEVC_ENC := true
+
+# Allow deprecated BUILD_ module types to get DDK building
+BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
+BUILD_BROKEN_USES_BUILD_HOST_EXECUTABLE := true
+BUILD_BROKEN_USES_BUILD_HOST_SHARED_LIBRARY := true
+BUILD_BROKEN_USES_BUILD_HOST_STATIC_LIBRARY := true
+
+# for dynamaic afbc target 
+BOARD_HS_DYNAMIC_AFBC_TARGET := false
+
+# AB image definition
+BOARD_USES_AB_IMAGE := false
+BOARD_ROCKCHIP_VIRTUAL_AB_ENABLE := false
+BOARD_USE_SPARSE_SYSTEM_IMAGE := true
 
 #Config RK EBOOK
 BUILD_WITH_RK_EBOOK := true
 SF_PRIMARY_DISPLAY_ORIENTATION := 90
 
 PRODUCT_HAVE_OPTEE := false
+
+# Add widevine L3 support
+BOARD_WIDEVINE_OEMCRYPTO_LEVEL := 3
