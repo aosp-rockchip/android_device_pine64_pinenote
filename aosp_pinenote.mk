@@ -22,11 +22,11 @@ PRODUCT_SDMMC_DEVICE := fe2b0000.dwmmc
 
 include device/rockchip/common/build/rockchip/DynamicPartitions.mk
 include device/pine64/pinenote/BoardConfig.mk
-include device/rockchip/common/BoardConfig.mk
+include device/pine64/pinenote/BoardConfigCommon.mk
+include device/pine64/pinenote/common.mk
 include device/pine64/pinenote/device.mk
 -include device/pine64/pinenote-kernel/device-kernel.mk
 
-$(call inherit-product, device/rockchip/common/device.mk)
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
 PRODUCT_NAME := aosp_pinenote

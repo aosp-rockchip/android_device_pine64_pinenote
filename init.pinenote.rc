@@ -29,3 +29,21 @@ on init
 
     chown system system /sys/class/devfreq/dmc/system_status
     chmod 0666 /sys/class/devfreq/dmc/system_status
+
+    # backlight
+    chown system system /sys/devices/platform/fe5c0000.i2c/i2c-3/3-0036/lm3630a_cold_light
+    chmod 0666 /sys/devices/platform/fe5c0000.i2c/i2c-3/3-0036/lm3630a_cold_light
+    chown system system /sys/devices/platform/fe5c0000.i2c/i2c-3/3-0036/lm3630a_warm_light
+    chmod 0666 /sys/devices/platform/fe5c0000.i2c/i2c-3/3-0036/lm3630a_warm_light
+
+service vendor.folio_daemon /vendor/bin/folio_daemon
+    class late_start
+    user system
+    group system uhid
+    disabled
+
+on property:init.svc.zygote=running
+    start vendor.folio_daemon
+
+on property:init.svc.zygote=stopped
+    stop vendor.folio_daemon

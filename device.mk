@@ -15,7 +15,8 @@ PRODUCT_COPY_FILES += \
 
 # Apps
 PRODUCT_PACKAGES += \
-    NoNavigationBarModeGestural
+    NoNavigationBarModeGestural \
+    EinkSystemUI
 
 PRODUCT_PACKAGES += \
     displayd \
@@ -30,7 +31,7 @@ PRODUCT_PACKAGES += \
 
 $(call inherit-product-if-exists, vendor/rockchip/common/npu/npu.mk)
 
-BOARD_SEPOLICY_DIRS += device/pine64/pinenote/sepolicy_vendor
+#BOARD_SEPOLICY_DIRS += device/pine64/pinenote/sepolicy_vendor
 TARGET_SYSTEM_PROP += device/pine64/pinenote/pinenote.prop
 
 # enable this for support f2fs with data partion
