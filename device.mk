@@ -1,10 +1,4 @@
-
-# First lunching is R, api_level is 30
-PRODUCT_SHIPPING_API_LEVEL := 30
-PRODUCT_DTBO_TEMPLATE := $(LOCAL_PATH)/dt-overlay.in
-PRODUCT_SDMMC_DEVICE := fe2b0000.dwmmc
-
-DEVICE_PACKAGE_OVERLAYS := device/rockchip/common/overlay $(LOCAL_PATH)/overlay
+DEVICE_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
@@ -19,16 +13,13 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/eink_logo/android_logo/bootanimation.zip:$(TARGET_COPY_OUT_ODM)/media/bootanimation.zip \
     $(LOCAL_PATH)/android.software.eink.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.eink.xml
 
+# Apps
 PRODUCT_PACKAGES += \
     NoNavigationBarModeGestural
 
 PRODUCT_PACKAGES += \
     displayd \
     libion
-
-# Disable partial updates
-PRODUCT_PROPERTY_OVERRIDES += \
-    debug.hwui.use_partial_updates=false
 
 #BOARD_SEPOLICY_DIRS += vendor/rockchip/hardware/interfaces/neuralnetworks/1.0/default/sepolicy
 PRODUCT_PACKAGES += \
@@ -43,13 +34,11 @@ BOARD_SEPOLICY_DIRS += device/pine64/pinenote/sepolicy_vendor
 TARGET_SYSTEM_PROP += device/pine64/pinenote/pinenote.prop
 
 # enable this for support f2fs with data partion
+TARGET_USERIMAGES_USE_F2FS := true
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 
 # used for fstab_generator, sdmmc controller address
 PRODUCT_BOOT_DEVICE := fe310000.sdhci,fe330000.nandc
-
-# This ensures the needed build tools are available.
-TARGET_USERIMAGES_USE_F2FS := true
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.recovery.rk30board.rc:recovery/root/init.recovery.rk30board.rc \
@@ -60,6 +49,10 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml
+
+# Use vulkan backend for hwui
+PRODUCT_PROPERTY_OVERRIDES += \
+    debug.hwui.renderer=skiavk
 
 # copy xml files for Vulkan features.
 PRODUCT_COPY_FILES += \
@@ -74,8 +67,6 @@ PRODUCT_COPY_FILES += \
 # Get the long list of APNs
 PRODUCT_COPY_FILES += vendor/rockchip/common/phone/etc/apns-full-conf.xml:system/etc/apns-conf.xml
 PRODUCT_COPY_FILES += vendor/rockchip/common/phone/etc/spn-conf.xml:system/etc/spn-conf.xml
-PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.gralloc.disable_afbc = 0
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
@@ -107,4 +98,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
                 ro.factory.tool=0 \
                 ro.kernel.android.checkjni=0 \
                 ro.build.shutdown_timeout=6 \
-                persist.enable_task_snapshots=false
+                persist.enable_task_snapshots=false 
+                vendor.gralloc.disable_afbc=0 \
+                dalvik.vm.foreground-heap-growth-multiplier=2.0

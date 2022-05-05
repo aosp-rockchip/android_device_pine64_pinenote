@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+ALLOW_MISSING_DEPENDENCIES := true
 
 # First lunching is R, api_level is 30
 PRODUCT_SHIPPING_API_LEVEL := 30
@@ -22,11 +23,11 @@ PRODUCT_SDMMC_DEVICE := fe2b0000.dwmmc
 include device/rockchip/common/build/rockchip/DynamicPartitions.mk
 include device/pine64/pinenote/BoardConfig.mk
 include device/rockchip/common/BoardConfig.mk
+include device/pine64/pinenote/device.mk
 -include device/pine64/pinenote-kernel/device-kernel.mk
 
 $(call inherit-product, device/rockchip/common/device.mk)
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
-$(call inherit-product, device/pine64/pinenote/device.mk)
 
 PRODUCT_NAME := aosp_pinenote
 PRODUCT_DEVICE := pinenote
