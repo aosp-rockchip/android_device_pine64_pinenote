@@ -14,42 +14,14 @@
 # limitations under the License.
 #
 #binder protocol(8)
-TARGET_USES_64_BIT_BINDER := true
-TARGET_BOARD_PLATFORM ?= rk3288
-TARGET_BOARD_HARDWARE ?= rk30board
+TARGET_BOARD_HARDWARE := rk30board
 # value: tablet,box,phone
 # It indicates whether to be tablet platform or not
 
 # Export this prop for Mainline Modules.
 ROCKCHIP_LUNCHING_API_LEVEL := $(PRODUCT_SHIPPING_API_LEVEL)
 
-ifneq ($(filter %box, $(TARGET_PRODUCT)), )
-TARGET_BOARD_PLATFORM_PRODUCT ?= box
-else
-ifneq ($(filter %vr, $(TARGET_PRODUCT)), )
-TARGET_BOARD_PLATFORM_PRODUCT ?= vr
-else
-TARGET_BOARD_PLATFORM_PRODUCT ?= tablet
-endif
-endif
-
-# CPU feature configration
-ifeq ($(strip $(TARGET_BOARD_HARDWARE)), rk30board)
-
-TARGET_ARCH ?= arm
-TARGET_ARCH_VARIANT ?= armv7-a-neon
-ARCH_ARM_HAVE_TLS_REGISTER ?= true
-TARGET_CPU_ABI ?= armeabi-v7a
-TARGET_CPU_ABI2 ?= armeabi
-TARGET_CPU_VARIANT ?= cortex-a9
-TARGET_CPU_SMP ?= true
-else
-TARGET_ARCH ?= x86
-TARGET_ARCH_VARIANT ?= silvermont
-TARGET_CPU_ABI ?= x86
-TARGET_CPU_ABI2 ?= 
-TARGET_CPU_SMP ?= true
-endif
+TARGET_BOARD_PLATFORM_PRODUCT := tablet
 
 BOARD_PLATFORM_VERSION := 11.0
 
@@ -57,40 +29,24 @@ BOARD_PLATFORM_VERSION := 11.0
 BOARD_AVB_ENABLE ?= false
 BOARD_BOOT_HEADER_VERSION ?= 2
 BOARD_MKBOOTIMG_ARGS :=
-BOARD_PREBUILT_DTBOIMAGE ?= $(TARGET_DEVICE_DIR)/dtbo.img
 BOARD_ROCKCHIP_VIRTUAL_AB_ENABLE ?= false
-BOARD_SELINUX_ENFORCING ?= true
+BOARD_SELINUX_ENFORCING ?= false
 
 # Use the non-open-source parts, if they're present
-TARGET_PREBUILT_KERNEL ?= kernel/arch/arm/boot/zImage
-TARGET_PREBUILT_RESOURCE ?= kernel/resource.img
-BOARD_PREBUILT_DTBIMAGE_DIR ?= kernel/arch/arm/boot/dts
-PRODUCT_PARAMETER_TEMPLATE ?= device/rockchip/common/scripts/parameter_tools/parameter.in
 TARGET_BOARD_HARDWARE_EGL ?= mali
-
-#Android GO configuration
-BUILD_WITH_GO_OPT ?= false
-
-ifeq ($(BUILD_WITH_GO_OPT), true)
-PRODUCT_FSTAB_TEMPLATE ?= device/rockchip/common/scripts/fstab_tools/fstab_go.in
-PRODUCT_KERNEL_CONFIG += android-11-go.config
-else
-PRODUCT_FSTAB_TEMPLATE ?= device/rockchip/common/scripts/fstab_tools/fstab.in
-PRODUCT_KERNEL_CONFIG += android-11.config
-endif
 
 ifeq ($(TARGET_BUILD_VARIANT), user)
 PRODUCT_KERNEL_CONFIG += non_debuggable.config
 endif
 
 ifeq ($(BOARD_AVB_ENABLE), true)
-BOARD_KERNEL_CMDLINE := androidboot.wificountrycode=CN androidboot.hardware=rk30board androidboot.console=ttyFIQ0 firmware_class.path=/vendor/etc/firmware init=/init rootwait ro init=/init
+BOARD_KERNEL_CMDLINE := androidboot.hardware=rk30board androidboot.console=ttyFIQ0 firmware_class.path=/vendor/etc/firmware init=/init rootwait ro init=/init
 else # BOARD_AVB_ENABLE is false
-BOARD_KERNEL_CMDLINE := console=ttyFIQ0 androidboot.baseband=N/A androidboot.wificountrycode=CN androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 androidboot.verifiedbootstate=orange firmware_class.path=/vendor/etc/firmware init=/init rootwait ro
+BOARD_KERNEL_CMDLINE := console=ttyFIQ0 androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 androidboot.verifiedbootstate=orange firmware_class.path=/vendor/etc/firmware init=/init rootwait ro
 endif # BOARD_AVB_ENABLE
 
 BOARD_KERNEL_CMDLINE += loop.max_part=7
-ROCKCHIP_RECOVERYIMAGE_CMDLINE_ARGS ?= console=ttyFIQ0 androidboot.baseband=N/A androidboot.selinux=permissive androidboot.wificountrycode=CN androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 firmware_class.path=/vendor/etc/firmware init=/init root=PARTUUID=af01642c-9b84-11e8-9b2a-234eb5e198a0
+ROCKCHIP_RECOVERYIMAGE_CMDLINE_ARGS ?= console=ttyFIQ0 androidboot.selinux=permissive  androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 firmware_class.path=/vendor/etc/firmware init=/init root=PARTUUID=af01642c-9b84-11e8-9b2a-234eb5e198a0
 
 ifneq ($(BOARD_SELINUX_ENFORCING), true)
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
@@ -209,37 +165,10 @@ SF_PRIMARY_DISPLAY_ORIENTATION ?= 0
 #NO: Screen to single
 DOUBLE_SCREEN ?= NO
 
-ifeq ($(strip $(TARGET_BOARD_PLATFORM_GPU)), mali400)
-BOARD_EGL_CFG := vendor/rockchip/common/gpu/Mali400/lib/arm/egl.cfg
-endif
-
-ifeq ($(strip $(TARGET_BOARD_PLATFORM_GPU)), mali450)
-BOARD_EGL_CFG := vendor/rockchip/common/gpu/Mali450/lib/x86/egl.cfg
-endif
-
-ifeq ($(strip $(TARGET_BOARD_PLATFORM_GPU)), mali-t860)
-BOARD_EGL_CFG := vendor/rockchip/common/gpu/MaliT860/etc/egl.cfg
-endif
-
-ifeq ($(strip $(TARGET_BOARD_PLATFORM_GPU)), mali-t760)
-BOARD_EGL_CFG := vendor/rockchip/common/gpu/MaliT760/etc/egl.cfg
-endif
-
-ifeq ($(strip $(TARGET_BOARD_PLATFORM_GPU)), mali-t720)
-BOARD_EGL_CFG := vendor/rockchip/common/gpu/MaliT720/etc/egl.cfg
-endif
-
-ifeq ($(strip $(TARGET_BOARD_PLATFORM_GPU)), PVR540)
-BOARD_EGL_CFG ?= vendor/rockchip/common/gpu/PVR540/egl.cfg
-endif
-
 VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
 
 TARGET_BOOTLOADER_BOARD_NAME ?= rk30sdk
 TARGET_NO_BOOTLOADER ?= true
-ifeq ($(filter atv box, $(strip $(TARGET_BOARD_PLATFORM_PRODUCT))), )
-DEVICE_PACKAGE_OVERLAYS += device/rockchip/common/overlay
-endif
 
 TARGET_RELEASETOOLS_EXTENSIONS := device/rockchip/common
 
@@ -248,22 +177,13 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 # Sepolicy
 PRODUCT_SEPOLICY_SPLIT := true
-BOARD_SEPOLICY_DIRS ?= \
-    device/rockchip/common/sepolicy/vendor
+#BOARD_SEPOLICY_DIRS ?= \
+#    device/rockchip/common/sepolicy/vendor
 # BOARD_PLAT_PUBLIC_SEPOLICY_DIR ?= device/rockchip/common/sepolicy/public
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR ?= \
-    device/rockchip/common/sepolicy/private \
-    device/rockchip/$(TARGET_BOARD_PLATFORM)/sepolicy
+#BOARD_PLAT_PRIVATE_SEPOLICY_DIR ?= \
+#    device/rockchip/common/sepolicy/private \
+#    device/rockchip/$(TARGET_BOARD_PLATFORM)/sepolicy
 
-ifneq ($(BUILD_WITH_RK_EBOOK),true)
-    BOARD_SEPOLICY_DIRS += \
-        device/rockchip/common/sepolicy/split
-endif
-
-ifeq ($(TARGET_BOARD_PLATFORM_PRODUCT),box)
-    BOARD_SEPOLICY_DIRS += \
-        device/rockchip/common/box/sepolicy/vendor
-endif
 
 # Enable VNDK Check for Android P (MUST after P)
 BOARD_VNDK_VERSION := current
@@ -317,37 +237,11 @@ BOARD_SUPPORT_HDMI ?= true
 # gralloc 4.0
 include device/rockchip/common/gralloc.device.mk
 
-
-# google apps
-BUILD_BOX_WITH_GOOGLE_MARKET ?= false
-BUILD_WITH_GOOGLE_MARKET ?= false
-BUILD_WITH_GOOGLE_MARKET_ALL ?= false
-BUILD_WITH_GOOGLE_GMS_EXPRESS ?= false
-BUILD_WITH_GOOGLE_FRP ?= false
-
 # define BUILD_NUMBER
 #BUILD_NUMBER := $(shell $(DATE) +%H%M%S)
 
 # face lock
 BUILD_WITH_FACELOCK ?= false
-
-# ebook
-BUILD_WITH_RK_EBOOK ?= false
-
-# Sensors
-BOARD_SENSOR_ST ?= true
-# if use akm8963
-#BOARD_SENSOR_COMPASS_AK8963 ?= true
-# if need calculation angle between two gsensors
-#BOARD_SENSOR_ANGLE ?= true
-# if need calibration
-#BOARD_SENSOR_CALIBRATION ?= true
-# if use mpu
-#BOARD_SENSOR_MPU ?= true
-#BOARD_USES_GENERIC_INVENSENSE ?= false
-
-# readahead files to improve boot time
-# BOARD_BOOT_READAHEAD ?= true
 
 BOARD_BP_AUTO ?= true
 
@@ -360,28 +254,14 @@ BOARD_CODEC_RT3224 ?= true
 BOARD_CODEC_RT5631 ?= false
 BOARD_CODEC_RK616 ?= false
 
-# Vold configrations
-# if set to true m-user would be disabled and UMS enabled, if set to disable UMS would be disabled and m-user enabled
-BUILD_WITH_UMS ?= false
-# if set to true BUILD_WITH_UMS must be false.
-BUILD_WITH_CDROM ?= false
-BUILD_WITH_CDROM_PATH ?= /system/etc/cd.iso
 # multi usb partitions
 BUILD_WITH_MULTI_USB_PARTITIONS ?= false
-# define tablet support NTFS
-BOARD_IS_SUPPORT_NTFS ?= true
 
 # pppoe for cts, you should set this true during pass CTS and which will disable  pppoe function.
 BOARD_PPPOE_PASS_CTS ?= false
 
 # ethernet
 BOARD_HS_ETHERNET ?= false
-
-# Save commit id into firmware
-BOARD_RECORD_COMMIT_ID ?= false
-
-# no battery
-BUILD_WITHOUT_BATTERY ?= false
 
 BOARD_CHARGER_ENABLE_SUSPEND ?= true
 CHARGER_ENABLE_SUSPEND ?= true
@@ -396,7 +276,6 @@ BOARD_WITH_MEM_OPTIMISE ?= false
 
 #force app can see udisk
 BOARD_FORCE_UDISK_VISIBLE ?= true
-
 
 # disable safe mode to speed up boot time
 BOARD_DISABLE_SAFE_MODE ?= true
@@ -432,27 +311,6 @@ BOARD_BLUETOOTH_SUPPORT ?= true
 BOARD_BLUETOOTH_LE_SUPPORT ?= true
 BOARD_WIFI_SUPPORT ?= true
 
-#for rk 4g modem
-BOARD_HAS_RK_4G_MODEM ?= false
-
-ifeq ($(strip $(BOARD_HAS_RK_4G_MODEM)),true)
-DEVICE_MANIFEST_FILE += device/rockchip/common/4g_modem/manifest.xml
-endif
-
-#USE_CLANG_PLATFORM_BUILD ?= true
-
-# Android Q, move to device.mk since we can not change PRODUCT_PACKAGES in BoardConfig.mk
-# Zoom out recovery ui of box by two percent.
-#ifneq ($(filter atv box, $(strip $(TARGET_BOARD_PLATFORM_PRODUCT))), )
-#    TARGET_RECOVERY_OVERSCAN_PERCENT := 2
-#    TARGET_BASE_PARAMETER_IMAGE ?= device/rockchip/common/baseparameter/baseparameter_fb720.img
-    # savBaseParameter tool
-#    ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
-#        PRODUCT_PACKAGES += saveBaseParameter
-#    endif
-#    DEVICE_FRAMEWORK_MANIFEST_FILE := device/rockchip/common/manifest_framework_override.xml
-#endif
-
 #enable cpusets sched policy
 ENABLE_CPUSETS := true
 
@@ -461,9 +319,6 @@ BOARD_USE_SPARSE_SYSTEM_IMAGE ?= false
 
 #Use HWC2
 TARGET_USES_HWC2 ?= true
-
-# for gralloc 0.3
-TARGET_RK_GRALLOC_VERSION ?= 1
 
 # CTS require faketouch
 ifneq ($(TARGET_BOARD_PLATFORM_PRODUCT), atv)
@@ -478,31 +333,3 @@ BOARD_USB_ALLOW_DEFAULT_MTP ?= false
 
 BOARD_DEFAULT_CAMERA_HAL_VERSION ?=3.3
 
-# rktoolbox
-BOARD_WITH_RKTOOLBOX ?=true
-BOARD_MEMTRACK_SUPPORT ?= false
-
-#TWRP
-ifeq ($(strip $(BOARD_TWRP_ENABLE)), true)
-	TW_THEME := landscape_hdpi
-	TW_USE_TOOLBOX := true
-	TW_EXTRA_LANGUAGES := true
-	TW_DEFAULT_LANGUAGE := zh_CN
-	DEVICE_RESOLUTION := 1280x720
-	TW_NO_BATT_PERCENT := true
-	TWRP_EVENT_LOGGING := false
-	TARGET_RECOVERY_FORCE_PIXEL_FORMAT := RGB_565
-	TW_NO_SCREEN_TIMEOUT := true
-	TW_NO_SCREEN_BLANK := true
-	TW_SCREEN_BLANK_ON_BOOT := false
-	TW_IGNORE_MISC_WIPE_DATA := true
-	TW_HAS_MTP := true
-	TW_NO_USB_STORAGE := true
-
-endif
-
-BOARD_BASEPARAMETER_SUPPORT ?= true
-ifeq ($(strip $(BOARD_BASEPARAMETER_SUPPORT)), true)
-    TARGET_BASE_PARAMETER_IMAGE ?= device/rockchip/common/baseparameter/baseparameter.img
-    BOARD_WITH_SPECIAL_PARTITIONS := baseparameter:1M
-endif
