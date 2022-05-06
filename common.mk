@@ -17,25 +17,16 @@ include vendor/rockchip/common/BoardConfigVendor.mk
 
 BOARD_VENDOR_GPU_PLATFORM := bifrost
 
-# Inherit product config
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+
+# Normal tablet, add QuickStep for normal product only.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
 PRODUCT_PACKAGES += Launcher3QuickStep
 
 PRODUCT_AAPT_CONFIG ?= normal large xlarge hdpi xhdpi xxhdpi
 PRODUCT_AAPT_PREF_CONFIG ?= xhdpi
 
-PRODUCT_PACKAGES += \
-    ExactCalculator
 
-PRODUCT_DEXPREOPT_SPEED_APPS += \
-    DeskClock \
-    DocumentsUI \
-    ExactCalculator \
-    Settings
-
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.boot-dex2oat-threads=4
 
 ########################################################
 # Kernel
@@ -45,13 +36,14 @@ PRODUCT_COPY_FILES += \
 
 #SDK Version
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.rksdk.version=ANDROID$(PLATFORM_VERSION)_RKR8
+    ro.rksdk.version=RK30_ANDROID$(PLATFORM_VERSION)-SDK-v1.00.00
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
     fsck.f2fs \
     mkfs.f2fs \
     fsck_f2fs
+
 PRODUCT_PACKAGES += \
     vndservicemanager
 
@@ -68,28 +60,21 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	ro.surface_flinger.primary_display_orientation=ORIENTATION_$(SF_PRIMARY_DISPLAY_ORIENTATION)
 endif
 
-# Save space but slow down device.
-# DONT_UNCOMPRESS_PRIV_APPS_DEXS := true
-# Config jemalloc for low memory
+PRODUCT_DEX_PREOPT_GENERATE_DM_FILES := true
+PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := verify
+# Configure jemalloc for low memory 
 MALLOC_SVELTE := true
 
-# Reduces GC frequency of foreground apps by 50%
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.foreground-heap-growth-multiplier=2.0
-
 PRODUCT_COPY_FILES += \
-    device/rockchip/common/init.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rockchip.rc \
-    device/rockchip/common/init.mount_all_early.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mount_all.rc \
-    device/rockchip/common/init.tune_io.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.tune_io.rc \
+    $(LOCAL_PATH)/init.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rockchip.rc \
+    $(LOCAL_PATH)/init.mount_all_early.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mount_all.rc \
+    $(LOCAL_PATH)/init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.connectivity.rc \
     $(LOCAL_PATH)/init.insmod.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.cfg \
     $(LOCAL_PATH)/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
-    device/rockchip/common/init.$(TARGET_BOARD_HARDWARE).rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).rc \
-    device/rockchip/common/init.$(TARGET_BOARD_HARDWARE).usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).usb.rc \
-    device/rockchip/common/ueventd.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
-    device/rockchip/common/rk29-keypad.kl:system/usr/keylayout/rk29-keypad.kl \
-    device/rockchip/common/ff680030_pwm.kl:system/usr/keylayout/ff680030_pwm.kl \
-     device/rockchip/common/alarm_filter.xml:system/etc/alarm_filter.xml \
-	device/rockchip/common/ff420030_pwm.kl:system/usr/keylayout/ff420030_pwm.kl
+    $(LOCAL_PATH)/init.$(TARGET_BOARD_HARDWARE).rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).rc \
+    $(LOCAL_PATH)/init.$(TARGET_BOARD_HARDWARE).usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).usb.rc \
+    $(LOCAL_PATH)/ueventd.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+    $(LOCAL_PATH)/alarm_filter.xml:system/etc/alarm_filter.xml \
 
 PRODUCT_COPY_FILES += \
     hardware/rockchip/libgraphicpolicy/graphic_profiles.conf:$(TARGET_COPY_OUT_VENDOR)/etc/graphic/graphic_profiles.conf
@@ -116,7 +101,7 @@ PRODUCT_PACKAGES += \
     wpa_cli \
     wpa_supplicant.conf \
     dhcpcd.conf
-    
+
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service-lazy
 
@@ -144,39 +129,30 @@ $(call inherit-product-if-exists, hardware/rockchip/audio/tinyalsa_hal/codec_con
 # https://source.android.google.cn/devices/storage/sdcardfs-deprecate
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-ifeq ($(BOARD_BLUETOOTH_SUPPORT),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml
-ifeq ($(BOARD_BLUETOOTH_LE_SUPPORT),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
-endif
-endif
 
-ifeq ($(BOARD_WIFI_SUPPORT),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
     frameworks/native/data/etc/android.software.ipsec_tunnels.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.ipsec_tunnels.xml
-endif
 
-ifeq ($(BOARD_USER_FAKETOUCH),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.faketouch.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.faketouch.xml
-endif
 
 # USB HOST
-ifeq ($(BOARD_USB_HOST_SUPPORT),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml
-endif
 
 # USB ACCESSORY
-ifeq ($(BOARD_USB_ACCESSORY_SUPPORT),true)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.accessory.xml
-endif
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.boot.vr=0
 
 # Sensor HAL
 PRODUCT_PACKAGES += \
@@ -197,22 +173,20 @@ PRODUCT_PACKAGES += \
     akmd \
     libion_ext
 
+
 # Light AIDL
 PRODUCT_PACKAGES += \
     android.hardware.lights \
     android.hardware.lights-service.rockchip
-    
-ifeq ($(strip $(BOARD_SUPER_PARTITION_GROUPS)),rockchip_dynamic_partitions)
+
 # Fastbootd HAL
 # TODO: develop a hal for GMS...
 PRODUCT_PACKAGES += \
     android.hardware.fastboot@1.0-impl-rockchip \
     fastbootd
-endif # BOARD_USE_DYNAMIC_PARTITIONS
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.mpp_buf_type=1
-
 # Gralloc HAL
 PRODUCT_PACKAGES += \
     arm.graphics-V1-ndk_platform.so \
@@ -221,8 +195,8 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@4.0-service
 
 DEVICE_MANIFEST_FILE += \
-    device/rockchip/common/manifests/android.hardware.graphics.mapper@4.0.xml \
-    device/rockchip/common/manifests/android.hardware.graphics.allocator@4.0.xml
+    device/pine64/pinenote/manifests/android.hardware.graphics.mapper@4.0.xml \
+    device/pine64/pinenote/manifests/android.hardware.graphics.allocator@4.0.xml
 
 PRODUCT_PACKAGES += \
     rkhelper
@@ -237,6 +211,7 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.composer@2.1-service
 
+# iep
 BUILD_IEP := true
 PRODUCT_PACKAGES += \
     libiep
@@ -290,18 +265,16 @@ PRODUCT_PACKAGES += \
 
 # for swiftshader, vulkan v1.1 test.
 PRODUCT_PACKAGES += \
-    vulkan.pastel
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.hardware.vulkan=pastel
+  vulkan.rk30board
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.cpuvulkan.version=4198400
+  ro.cpuvulkan.version=4198400
 
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_1.xml \
-    frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level-0.xml \
-    frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute-0.xml \
-    frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml
+  frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_1.xml \
+  frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level-0.xml \
+  frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute-0.xml \
+  frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml
 
 # Filesystem management tools
 # EXT3/4 support
@@ -322,9 +295,6 @@ PRODUCT_PACKAGES += \
     tinycap \
     tinypcminfo
 
-# PRODUCT_PROPERTY_OVERRIDES += \
-#    media.stagefright.thumbnail.prefer_hw_codecs=true
-
 PRODUCT_PACKAGES += \
 	alsa.audio.primary.$(TARGET_BOARD_HARDWARE)\
 	alsa.audio_policy.$(TARGET_BOARD_HARDWARE)
@@ -338,41 +308,34 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += ro.rk.bt_enable=true
 
-PRODUCT_TAGS += dalvik.gc.type-precise
-
-########################################################
-# build with UMS? CDROM?
-########################################################
-PRODUCT_PROPERTY_OVERRIDES +=               \
-    ro.factory.hasUMS=true                  \
-    persist.sys.usb.config=mass_storage,adb
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init.rockchip.hasUMS.true.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).environment.rc
-
-
-########################################################
-# build with drmservice
-########################################################
-ifeq ($(strip $(BUILD_WITH_DRMSERVICE)),true)
-PRODUCT_PACKAGES += rockchip.drmservice
+ifeq ($(strip $(MT6622_BT_SUPPORT)),true)
+    PRODUCT_PROPERTY_OVERRIDES += ro.rk.btchip=mt6622
 endif
 
-########################################################
-# this product has GPS or not
-########################################################
+PRODUCT_PROPERTY_OVERRIDES += ro.rk.hdmi_enable=false
+PRODUCT_PROPERTY_OVERRIDES += ro.rk.flash_enable=false
+
+ifeq ($(strip $(MT7601U_WIFI_SUPPORT)),true)
+    PRODUCT_PROPERTY_OVERRIDES += ro.rk.wifichip=mt7601u
+endif
+
+PRODUCT_TAGS += dalvik.gc.type-precise
+
+PRODUCT_PROPERTY_OVERRIDES +=       \
+    ro.factory.hasUMS=false         \
+    testing.mediascanner.skiplist = /mnt/shell/emulated/Android/
+
+PRODUCT_COPY_FILES += \
+    device/pine64/pinenote/init.rockchip.hasUMS.false.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).environment.rc
+
+PRODUCT_PACKAGES += rockchip.drmservice
+
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.factory.hasGPS=false
 
-#######################################################
-#build system support ntfs?
-########################################################
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.factory.storage_suppntfs=false
 
-########################################################
-# build without barrery
-########################################################
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.factory.without_battery=false
  
@@ -395,49 +358,29 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.oem_unlock_supported=1
 
-ifneq ($(strip $(BOARD_WIDEVINE_OEMCRYPTO_LEVEL)), )
 PRODUCT_PACKAGES += \
     move_widevine_data.sh
+
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.3-service-lazy.widevine
-endif
-
-# Enable Incremental on the device via kernel driver
-PRODUCT_PROPERTY_OVERRIDES += ro.incremental.enable=yes
-PRODUCT_COPY_FILES += \
-    vendor/rockchip/common/gms/features/android.software.incremental_delivery.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.incremental_delivery.xml
 
 $(call inherit-product-if-exists, vendor/rockchip/common/device-vendor.mk)
+
+########################################################
+# this product has support remotecontrol or not
+########################################################
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.enable.remotecontrol=false
 
 PRODUCT_PACKAGES += \
 	abc
 
-# neon transform library by djw
-PRODUCT_COPY_FILES += \
-	device/rockchip/common/neon_transform/lib/librockchipxxx.so:system/lib/librockchipxxx.so \
-	device/rockchip/common/neon_transform/lib64/librockchipxxx.so:system/lib64/librockchipxxx.so
-
-# support eecolor hdr api
-PRODUCT_COPY_FILES += \
-        device/rockchip/common/eecolorapi/lib/libeecolorapi.so:system/lib/libeecolorapi.so \
-        device/rockchip/common/eecolorapi/lib64/libeecolorapi.so:system/lib64/libeecolorapi.so
-
-#if force app can see udisk
-ifeq ($(strip $(BOARD_FORCE_UDISK_VISIBLE)),true)
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.vendor.udisk.visible=true
-endif
 
 #if disable safe mode to speed up booting time
-ifeq ($(strip $(BOARD_DISABLE_SAFE_MODE)),true)
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.safemode.disabled=true
-endif
-
-ifeq ($(strip $(BOARD_ENABLE_PMS_MULTI_THREAD_SCAN)), true)
-PRODUCT_PROPERTY_OVERRIDES += \
-	ro.pms.multithreadscan=true		
-endif
 
 #add for hwui property
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -446,7 +389,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     sys.status.hidebar_enable=false
 
 PRODUCT_FULL_TREBLE_OVERRIDE := true
+#PRODUCT_COMPATIBILITY_MATRIX_LEVEL_OVERRIDE := 27
 
+# Add runtime resource overlay for framework-res
 PRODUCT_ENFORCE_RRO_TARGETS := \
     framework-res
 
@@ -491,18 +436,13 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.logd.kernel=1
 PRODUCT_COPY_FILES += \
-    device/rockchip/common/zmodem/rz:$(TARGET_COPY_OUT_VENDOR)/bin/rz \
-    device/rockchip/common/zmodem/sz:$(TARGET_COPY_OUT_VENDOR)/bin/sz \
-    device/rockchip/common/picocom/bin/picocom:$(TARGET_COPY_OUT_VENDOR)/bin/picocom
+    $(LOCAL_PATH)/zmodem/rz:$(TARGET_COPY_OUT_VENDOR)/bin/rz \
+    $(LOCAL_PATH)/zmodem/sz:$(TARGET_COPY_OUT_VENDOR)/bin/sz \
+    $(LOCAL_PATH)/picocom/bin/picocom:$(TARGET_COPY_OUT_VENDOR)/bin/picocom
 PRODUCT_PACKAGES += io
 endif
 
 USE_XML_AUDIO_POLICY_CONF := 1
-
-ifeq ($(strip $(BOARD_USE_DRM)),true)
-PRODUCT_PACKAGES += \
-    modetest
-endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
        ro.usb.default_mtp=true
@@ -524,25 +464,23 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rt_video_config.xml:/system/etc/rt_video_config.xml
 
-#read pcie info for Devicetest APK
-PRODUCT_COPY_FILES += \
-    device/rockchip/common/pcie/read_pcie_info.sh:vendor/bin/read_pcie_info.sh \
-    device/rockchip/common/pcie/lspcie:/vendor/bin/lspcie
+#FLASH_IMG
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.flash_img.enable=false
 
 # Vendor seccomp policy files for media components:
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/seccomp_policy/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy
+    device/pine64/pinenote/seccomp_policy/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy
 
 #bt config for ap bt
 PRODUCT_COPY_FILES += \
     $(TARGET_DEVICE_DIR)/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Rockchip HALs
-$(call inherit-product, device/rockchip/common/manifests/frameworks/vintf.mk)
-
+$(call inherit-product, device/pine64/pinenote/manifests/frameworks/vintf.mk)
+#for disable optee support
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@4.0-service \
     android.hardware.gatekeeper@1.0-service.software
 
-DEVICE_MANIFEST_FILE += device/rockchip/common/manifests/android.hardware.keymaster@4.0-service.xml
-TARGET_SUPPORTS_64_BIT_APPS := true
+DEVICE_MANIFEST_FILE += device/pine64/pinenote/manifests/android.hardware.keymaster@4.0-service.xml

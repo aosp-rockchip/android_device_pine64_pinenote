@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 #binder protocol(8)
+TARGET_USES_64_BIT_BINDER := true
 TARGET_BOARD_HARDWARE := rk30board
 # value: tablet,box,phone
 # It indicates whether to be tablet platform or not
@@ -21,7 +22,7 @@ TARGET_BOARD_HARDWARE := rk30board
 # Export this prop for Mainline Modules.
 ROCKCHIP_LUNCHING_API_LEVEL := $(PRODUCT_SHIPPING_API_LEVEL)
 
-TARGET_BOARD_PLATFORM_PRODUCT := tablet
+TARGET_BOARD_PLATFORM_PRODUCT ?= tablet
 
 BOARD_PLATFORM_VERSION := 11.0
 
@@ -29,10 +30,11 @@ BOARD_PLATFORM_VERSION := 11.0
 BOARD_AVB_ENABLE ?= false
 BOARD_BOOT_HEADER_VERSION ?= 2
 BOARD_MKBOOTIMG_ARGS :=
+BOARD_PREBUILT_DTBOIMAGE ?= $(TARGET_DEVICE_DIR)/dtbo.img
 BOARD_ROCKCHIP_VIRTUAL_AB_ENABLE ?= false
 BOARD_SELINUX_ENFORCING ?= false
 
-# Use the non-open-source parts, if they're present
+PRODUCT_PARAMETER_TEMPLATE ?= device/rockchip/common/scripts/parameter_tools/parameter.in
 TARGET_BOARD_HARDWARE_EGL ?= mali
 
 ifeq ($(TARGET_BUILD_VARIANT), user)
@@ -42,38 +44,28 @@ endif
 ifeq ($(BOARD_AVB_ENABLE), true)
 BOARD_KERNEL_CMDLINE := androidboot.hardware=rk30board androidboot.console=ttyFIQ0 firmware_class.path=/vendor/etc/firmware init=/init rootwait ro init=/init
 else # BOARD_AVB_ENABLE is false
-BOARD_KERNEL_CMDLINE := console=ttyFIQ0 androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 androidboot.verifiedbootstate=orange firmware_class.path=/vendor/etc/firmware init=/init rootwait ro
+BOARD_KERNEL_CMDLINE := console=ttyFIQ0 androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 android.wificountrycode=CN androidboot.verifiedbootstate=orange firmware_class.path=/vendor/etc/firmware init=/init rootwait ro
 endif # BOARD_AVB_ENABLE
 
 BOARD_KERNEL_CMDLINE += loop.max_part=7
-ROCKCHIP_RECOVERYIMAGE_CMDLINE_ARGS ?= console=ttyFIQ0 androidboot.selinux=permissive  androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 firmware_class.path=/vendor/etc/firmware init=/init root=PARTUUID=af01642c-9b84-11e8-9b2a-234eb5e198a0
+ROCKCHIP_RECOVERYIMAGE_CMDLINE_ARGS ?= console=ttyFIQ0 androidboot.baseband=N/A androidboot.selinux=permissive androidboot.wificountrycode=CN androidboot.veritymode=enforcing androidboot.hardware=rk30board androidboot.console=ttyFIQ0 firmware_class.path=/vendor/etc/firmware init=/init root=PARTUUID=af01642c-9b84-11e8-9b2a-234eb5e198a0
 
 ifneq ($(BOARD_SELINUX_ENFORCING), true)
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 endif
 
 # For Header V2, set resource.img as second.
-# For Header V3, add vendor_boot and resource.
-ifeq (1,$(strip $(shell expr $(BOARD_BOOT_HEADER_VERSION) \<= 2)))
 BOARD_MKBOOTIMG_ARGS += --second $(TARGET_PREBUILT_RESOURCE)
-endif
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 
-# Always use header v2 for recovery image,
-# - header v3 is used for virtual A/B and GKI;
-# - header v2 do not have recovery;
-ifneq ($(BOARD_ROCKCHIP_VIRTUAL_AB_ENABLE), true)
-ifneq ($(BOARD_USES_AB_IMAGE), true)
 BOARD_RECOVERY_MKBOOTIMG_ARGS ?= --second $(TARGET_PREBUILT_RESOURCE) --header_version 2
 ifeq ($(BOARD_AVB_ENABLE), true)
-BOARD_USES_FULL_RECOVERY_IMAGE := true
 BOARD_AVB_RECOVERY_KEY_PATH ?= external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_RECOVERY_ALGORITHM ?= SHA256_RSA4096
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX ?= $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION ?= 2
 endif
-endif
-endif
+
 BOARD_INCLUDE_RECOVERY_DTBO ?= true
 BOARD_INCLUDE_DTB_IN_BOOTIMG ?= true
 
@@ -91,8 +83,8 @@ BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE ?= ext4
 # default.prop & build.prop split
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED ?= true
 
-DEVICE_MANIFEST_FILE ?= device/rockchip/common/manifest.xml
-DEVICE_MATRIX_FILE   ?= device/rockchip/common/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := device/pine64/pinenote/manifest.xml
+DEVICE_MATRIX_FILE   := device/pine64/pinenote/compatibility_matrix.xml
 
 #Calculate partition size from parameter.txt
 USE_DEFAULT_PARAMETER := $(shell test -f $(TARGET_DEVICE_DIR)/parameter.txt && echo true)
@@ -128,7 +120,7 @@ else
     BOARD_ODMIMAGE_PARTITION_SIZE ?= 134217728
   endif
   BOARD_CACHEIMAGE_PARTITION_SIZE ?= 402653184
-  BOARD_BOOTIMAGE_PARTITION_SIZE ?= 41943040
+  BOARD_BOOTIMAGE_PARTITION_SIZE ?= 33554432
   BOARD_RECOVERYIMAGE_PARTITION_SIZE ?= 100663296
   BOARD_DTBOIMG_PARTITION_SIZE ?= 4194304
   # Header V3, add vendor_boot
@@ -141,8 +133,6 @@ else
 endif
 
 # GPU configration
-TARGET_BOARD_PLATFORM_GPU ?= mali-t760
-BOARD_USE_LCDC_COMPOSER ?= false
 GRAPHIC_MEMORY_PROVIDER ?= ump
 USE_OPENGL_RENDERER ?= true
 TARGET_DISABLE_TRIPLE_BUFFERING ?= false
@@ -157,8 +147,6 @@ DEVICE_HAVE_LIBRKVPU ?= true
 #270: ROTATION_LEFT    ORIENTATION_270: 270
 # For Recovery Rotation
 TARGET_RECOVERY_DEFAULT_ROTATION ?= ROTATION_NONE
-# For Surface Flinger Rotation
-SF_PRIMARY_DISPLAY_ORIENTATION ?= 0
 
 #Screen to Double, Single
 #YES: Screen to Double
@@ -177,13 +165,12 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 # Sepolicy
 PRODUCT_SEPOLICY_SPLIT := true
-#BOARD_SEPOLICY_DIRS ?= \
-#    device/rockchip/common/sepolicy/vendor
-# BOARD_PLAT_PUBLIC_SEPOLICY_DIR ?= device/rockchip/common/sepolicy/public
-#BOARD_PLAT_PRIVATE_SEPOLICY_DIR ?= \
-#    device/rockchip/common/sepolicy/private \
-#    device/rockchip/$(TARGET_BOARD_PLATFORM)/sepolicy
-
+BOARD_SEPOLICY_DIRS ?= \
+    device/rockchip/common/sepolicy/vendor
+#BOARD_PLAT_PUBLIC_SEPOLICY_DIR ?= device/rockchip/common/sepolicy/public
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR ?= \
+    device/rockchip/common/sepolicy/private \
+    device/pine64/pinenote/sepolicy
 
 # Enable VNDK Check for Android P (MUST after P)
 BOARD_VNDK_VERSION := current
@@ -200,7 +187,7 @@ RECOVERY_AUTO_USB_UPDATE ?= false
 
 # To use bmp as kernel logo, uncomment the line below to use bgra 8888 in recovery
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-TARGET_ROCKCHIP_PCBATEST ?= true
+TARGET_ROCKCHIP_PCBATEST ?= false
 #TARGET_RECOVERY_UI_LIB ?= librecovery_ui_$(TARGET_PRODUCT)
 TARGET_USERIMAGES_USE_EXT4 ?= true
 TARGET_USERIMAGES_USE_F2FS ?= false
@@ -212,9 +199,6 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE ?= ext4
 
 TARGET_USES_MKE2FS ?= true
 
-RECOVERY_BOARD_ID ?= false
-# RECOVERY_BOARD_ID ?= true
-
 # for drmservice
 BUILD_WITH_DRMSERVICE :=true
 
@@ -225,20 +209,11 @@ BOARD_USES_GENERIC_AUDIO ?= true
 BOARD_HAVE_BLUETOOTH ?= true
 BLUETOOTH_USE_BPLUS ?= false
 BOARD_HAVE_BLUETOOTH_BCM ?= false
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR ?= device/rockchip/$(TARGET_BOARD_PLATFORM)/bluetooth
-include device/rockchip/common/wifi_bt_common.mk
-
-#Camera flash
-BOARD_HAVE_FLASH ?= true
-
-#HDMI support
-BOARD_SUPPORT_HDMI ?= true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/pine64/pinenote/bluetooth
+include device/pine64/pinenote/wifi_bt_common.mk
 
 # gralloc 4.0
-include device/rockchip/common/gralloc.device.mk
-
-# define BUILD_NUMBER
-#BUILD_NUMBER := $(shell $(DATE) +%H%M%S)
+include device/pine64/pinenote/gralloc.device.mk
 
 # face lock
 BUILD_WITH_FACELOCK ?= false
@@ -260,76 +235,23 @@ BUILD_WITH_MULTI_USB_PARTITIONS ?= false
 # pppoe for cts, you should set this true during pass CTS and which will disable  pppoe function.
 BOARD_PPPOE_PASS_CTS ?= false
 
-# ethernet
-BOARD_HS_ETHERNET ?= false
-
 BOARD_CHARGER_ENABLE_SUSPEND ?= true
 CHARGER_ENABLE_SUSPEND ?= true
 CHARGER_DISABLE_INIT_BLANK ?= true
 BOARD_CHARGER_DISABLE_INIT_BLANK ?= true
 
-#stress test
-BOARD_HAS_STRESSTEST_APP ?= true
-
-#optimise mem
-BOARD_WITH_MEM_OPTIMISE ?= false
-
-#force app can see udisk
-BOARD_FORCE_UDISK_VISIBLE ?= true
-
-# disable safe mode to speed up boot time
-BOARD_DISABLE_SAFE_MODE ?= true
-
-#enable 3g dongle
-BOARD_HAVE_DONGLE ?= false
-
-#for boot and shutdown animation ringing
-BOOT_SHUTDOWN_ANIMATION_RINGING ?= false
-
-#for pms multi thead scan
-BOARD_ENABLE_PMS_MULTI_THREAD_SCAN ?= false
-
 #for WV keybox provision
 ENABLE_KEYBOX_PROVISION ?= false
 
 # product has follow sensors or not,if had override it in product's BoardConfig
-BOARD_HAS_GPS ?= false   
-BOARD_NFC_SUPPORT ?= false
-BOARD_GRAVITY_SENSOR_SUPPORT ?= false
 BOARD_GSENSOR_MXC6655XA_SUPPORT ?= false
-BOARD_COMPASS_SENSOR_SUPPORT ?= false
-BOARD_GYROSCOPE_SENSOR_SUPPORT ?= false
-BOARD_PROXIMITY_SENSOR_SUPPORT ?= false
-BOARD_LIGHT_SENSOR_SUPPORT ?= false
-BOARD_OPENGL_AEP ?= false
-BOARD_PRESSURE_SENSOR_SUPPORT ?= false
-BOARD_TEMPERATURE_SENSOR_SUPPORT ?= false
-BOARD_USB_HOST_SUPPORT ?= false
-BOARD_USB_ACCESSORY_SUPPORT ?= true
-BOARD_CAMERA_SUPPORT ?= false
 BOARD_BLUETOOTH_SUPPORT ?= true
 BOARD_BLUETOOTH_LE_SUPPORT ?= true
 BOARD_WIFI_SUPPORT ?= true
 
-#enable cpusets sched policy
-ENABLE_CPUSETS := true
-
-# Enable sparse system image
-BOARD_USE_SPARSE_SYSTEM_IMAGE ?= false
-
 #Use HWC2
 TARGET_USES_HWC2 ?= true
 
-# CTS require faketouch
-ifneq ($(TARGET_BOARD_PLATFORM_PRODUCT), atv)
-BOARD_USER_FAKETOUCH ?= true
-endif
-
-#for Camera autofocus support
-CAMERA_SUPPORT_AUTOFOCUS ?= false
-
-# Enable UsbDevice to Mtp mode,default is charge mode
-BOARD_USB_ALLOW_DEFAULT_MTP ?= false
-
+HIGH_RELIABLE_RECOVERY_OTA := false
+BOARD_USES_FULL_RECOVERY_IMAGE := false
 BOARD_DEFAULT_CAMERA_HAL_VERSION ?=3.3
-

@@ -21,8 +21,8 @@ PRODUCT_DTBO_TEMPLATE := $(LOCAL_PATH)/dt-overlay.in
 PRODUCT_SDMMC_DEVICE := fe2b0000.dwmmc
 
 include device/rockchip/common/build/rockchip/DynamicPartitions.mk
-include device/pine64/pinenote/BoardConfigCommon.mk
 include device/pine64/pinenote/BoardConfig.mk
+include device/pine64/pinenote/BoardConfigCommon.mk
 include device/pine64/pinenote/common.mk
 include device/pine64/pinenote/device.mk
 -include device/pine64/pinenote-kernel/device-kernel.mk

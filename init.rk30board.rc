@@ -231,7 +231,6 @@ on property:sys.boot_completed=1
     # if data is encrypt, when start gps too early, gpsd crashed
     start gpsd
     trigger sys-boot-completed-set
-    setprop vendor.boot_completed 1
 
 # We want one opportunity per boot to enable zram, so we
 # use a trigger we fire from the above stanza. If
@@ -327,7 +326,7 @@ on property:persist.sys.adb_enable=1
 on property:persist.sys.adb_enable=0
     stop adbd
 
-service flash_img /vendor/bin/flash_img.sh
+service flash_img /system/bin/flash_img.sh
     class main
     oneshot
     disabled
@@ -344,8 +343,5 @@ service read_pcie_info /vendor/bin/read_pcie_info.sh /mnt/sdcard/pcieInfo.tmp
     oneshot
     disabled
 
-on property:vendor.flash.success=2
+on property:sys.retaildemo.enabled=2
     start flash_img
-
-on property:flash.success=1
-   setprop vendor.flash.success 1
