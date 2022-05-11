@@ -163,7 +163,7 @@ PRODUCT_PACKAGES += \
 # Power AIDL
 PRODUCT_PACKAGES += \
     android.hardware.power \
-    android.hardware.power-service.rockchip
+    android.hardware.power-service.pinenote
 
 # Camera omx-plugin vpu akmd libion_rockchip_ext
 PRODUCT_PACKAGES += \

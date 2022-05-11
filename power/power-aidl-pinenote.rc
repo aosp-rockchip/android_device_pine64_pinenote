@@ -1,0 +1,5 @@
+service vendor.power-aidl-pinenote /vendor/bin/hw/android.hardware.power-service.pinenote
+    class hal
+    user root
+    group system
+    capabilities DAC_OVERRIDE
