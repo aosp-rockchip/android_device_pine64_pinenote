@@ -32,7 +32,7 @@ TARGET_BOARD_PLATFORM_PRODUCT := tablet
 PRODUCT_UBOOT_CONFIG := rk3566-eink
 PRODUCT_KERNEL_DTS := rk3566-rk817-eink-pinenote
 PRODUCT_KERNEL_ARCH := arm64
-PRODUCT_FSTAB_TEMPLATE := device/pine64/pinenote/fstab_eink.in
+PRODUCT_FSTAB_TEMPLATE := device/pine64/pinenote/init/fstab_eink.in
 
 BUILD_EMULATOR := false
 TARGET_BOARD_PLATFORM := rk356x

@@ -66,21 +66,21 @@ PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := verify
 MALLOC_SVELTE := true
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rockchip.rc \
-    $(LOCAL_PATH)/init.mount_all_early.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mount_all.rc \
-    $(LOCAL_PATH)/init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.connectivity.rc \
-    $(LOCAL_PATH)/init.insmod.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.cfg \
-    $(LOCAL_PATH)/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
-    $(LOCAL_PATH)/init.$(TARGET_BOARD_HARDWARE).rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).rc \
-    $(LOCAL_PATH)/init.$(TARGET_BOARD_HARDWARE).usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).usb.rc \
-    $(LOCAL_PATH)/ueventd.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
-    $(LOCAL_PATH)/alarm_filter.xml:system/etc/alarm_filter.xml \
+    $(LOCAL_PATH)/init/init.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rockchip.rc \
+    $(LOCAL_PATH)/init/init.mount_all_early.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mount_all.rc \
+    $(LOCAL_PATH)/init/init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.connectivity.rc \
+    $(LOCAL_PATH)/init/init.insmod.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/init.insmod.cfg \
+    $(LOCAL_PATH)/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
+    $(LOCAL_PATH)/init/init.$(TARGET_BOARD_HARDWARE).rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).rc \
+    $(LOCAL_PATH)/init/init.$(TARGET_BOARD_HARDWARE).usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).usb.rc \
+    $(LOCAL_PATH)/init/ueventd.rockchip.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+    $(LOCAL_PATH)/configs/alarm_filter.xml:system/etc/alarm_filter.xml \
 
 PRODUCT_COPY_FILES += \
     hardware/rockchip/libgraphicpolicy/graphic_profiles.conf:$(TARGET_COPY_OUT_VENDOR)/etc/graphic/graphic_profiles.conf
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wpa_config.txt:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_config.txt \
+    $(LOCAL_PATH)/configs/wpa_config.txt:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_config.txt \
     hardware/broadcom/wlan/bcmdhd/config/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     hardware/broadcom/wlan/bcmdhd/config/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     hardware/realtek/wlan/supplicant_overlay_config/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_rtk.conf \
@@ -106,8 +106,8 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service-lazy
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(LOCAL_PATH)/audio_policy_volumes_drc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes_drc.xml \
+    $(LOCAL_PATH)/configs/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(LOCAL_PATH)/configs/audio_policy_volumes_drc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes_drc.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
     frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
@@ -325,9 +325,6 @@ PRODUCT_PROPERTY_OVERRIDES +=       \
     ro.factory.hasUMS=false         \
     testing.mediascanner.skiplist = /mnt/shell/emulated/Android/
 
-PRODUCT_COPY_FILES += \
-    device/pine64/pinenote/init.rockchip.hasUMS.false.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.$(TARGET_BOARD_HARDWARE).environment.rc
-
 PRODUCT_PACKAGES += rockchip.drmservice
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -459,10 +456,10 @@ PRODUCT_PACKAGES += \
     rockchip.hardware.rkaudiosetting@1.0
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rt_audio_config.xml:/system/etc/rt_audio_config.xml
+    $(LOCAL_PATH)/configs/rt_audio_config.xml:/system/etc/rt_audio_config.xml
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rt_video_config.xml:/system/etc/rt_video_config.xml
+    $(LOCAL_PATH)/configs/rt_video_config.xml:/system/etc/rt_video_config.xml
 
 #FLASH_IMG
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -474,7 +471,7 @@ PRODUCT_COPY_FILES += \
 
 #bt config for ap bt
 PRODUCT_COPY_FILES += \
-    $(TARGET_DEVICE_DIR)/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
+    $(TARGET_DEVICE_DIR)/bluetooth/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Rockchip HALs
 $(call inherit-product, device/pine64/pinenote/manifests/frameworks/vintf.mk)

@@ -11,7 +11,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/eink_logo/standby_logo/standby_lowpower.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_lowpower.png \
     $(LOCAL_PATH)/eink_logo/standby_logo/standby_charge.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_charge.png \
     $(LOCAL_PATH)/eink_logo/android_logo/bootanimation.zip:$(TARGET_COPY_OUT_ODM)/media/bootanimation.zip \
-    $(LOCAL_PATH)/android.software.eink.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.eink.xml
+    $(LOCAL_PATH)/configs/android.software.eink.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.eink.xml
 
 # Apps
 PRODUCT_PACKAGES += \
@@ -42,11 +42,11 @@ BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 PRODUCT_BOOT_DEVICE := fe310000.sdhci,fe330000.nandc
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init.recovery.rk30board.rc:recovery/root/init.recovery.rk30board.rc \
+    $(LOCAL_PATH)/init/init.recovery.rk30board.rc:recovery/root/init.recovery.rk30board.rc \
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init.pinenote.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rk356x.rc \
-    $(LOCAL_PATH)/media_profiles_default.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml\
+    $(LOCAL_PATH)/init/init.pinenote.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rk356x.rc \
+    $(LOCAL_PATH)/configs/media_profiles_default.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml\
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml
@@ -66,7 +66,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level-2020-03-01.xml
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
+    $(LOCAL_PATH)/configs/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
 
 PRODUCT_PROPERTY_OVERRIDES += \
 				ro.sf.lcd_density=320 \
