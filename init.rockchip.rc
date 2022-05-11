@@ -117,9 +117,6 @@ service vendor.insmod_sh /vendor/bin/init.insmod.sh
     disabled
     oneshot
 
-#on property:ro.rk.btchip=broadcom.bplus
-#    start gpsd
-
 service gpsd  /system/bin/glgps -c /system/etc/gps/gpsconfig.xml
     class main
     disabled

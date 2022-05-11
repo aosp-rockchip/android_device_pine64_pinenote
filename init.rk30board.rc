@@ -1,15 +1,10 @@
 import /vendor/etc/init/hw/init.rockchip.rc
 import /vendor/etc/init/hw/init.connectivity.rc
-import /vendor/etc/init/hw/init.box.samba.rc
 import /vendor/etc/init/hw/init.${ro.board.platform}.rc
 import /vendor/etc/init/hw/init.${ro.target.product}.rc
-import /vendor/etc/init/hw/init.car.rc
 import /vendor/etc/init/hw/init.optee.rc
 
 on post-fs-data
-    chmod 664 /sys/class/display/HDMI/color
-
-
     chmod 0666 /dev/opteearmtz00
     chmod 0666 /dev/tee0
     chmod 0666 /dev/teepriv0
@@ -19,7 +14,6 @@ on post-fs-data
 
 on early-init
     write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor performance
-    write /sys/class/devfreq/dmc/governor performance
 
 on init
     # set temperature control policy as normal mode
@@ -58,29 +52,12 @@ on boot
     chown system system /sys/devices/system/cpu/cpu3/online
     chmod 0660 /sys/devices/system/cpu/cpu3/online
 
-    chown system system /sys/devices/system/cpu/cpu4/online
-    chmod 0660 /sys/devices/system/cpu/cpu4/online
-
-    chown system system /sys/devices/system/cpu/cpu5/online
-    chmod 0660 /sys/devices/system/cpu/cpu5/online
-
-    chown system system /sys/devices/system/cpu/cpu6/online
-    chmod 0660 /sys/devices/system/cpu/cpu6/online
-
-    chown system system /sys/devices/system/cpu/cpu7/online
-    chmod 0660 /sys/devices/system/cpu/cpu7/online
-
     chown system system /sys/module/rockchip_pm/parameters/policy
     chmod 0660 /sys/module/rockchip_pm/parameters/policy
 
     # Vop bandwidth for ddr dvfs
     chown system system /sys/class/devfreq/dmc/vop_bandwidth
     chmod 0660 /sys/class/devfreq/dmc/vop_bandwidth
-
-    # hdmi status
-    chown system system /sys/devices/platform/display-subsystem/drm/card0/card0-HDMI-A-1/status
-    chown system system /d/dw-hdmi/status
-    chmod 0660 /d/dw-hdmi/status
 
     #dp status
     chown system system /sys/devices/platform/display-subsystem/drm/card0/card0-DP-1/status
@@ -96,17 +73,6 @@ on boot
     write /proc/sys/net/core/rmem_max 1048576
     write /proc/sys/net/core/wmem_max 1048576
 
-    # backlight
-    chown system system /sys/class/backlight/rk28_bl/brightness
-    chown system system /sys/class/backlight/backlight/brightness
-    
-    # for hdmi
-    chown root system /sys/class/display/HDMI/enable
-    chown root system /sys/class/display/HDMI/mode
-    chown root system /sys/class/display/HDMI/scale
-    chown root system /sys/class/display/HDMI/3dmode
-    chmod 0664 /sys/class/display/HDMI/mode
-    chmod 0664 /sys/class/display/HDMI/3dmode
 
     chown root system /sys/class/graphics/fb0/bcsh
     chown root system /sys/class/graphics/fb0/dsp_lut
@@ -124,12 +90,6 @@ on boot
      
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
     chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed
-  
-    chown system system /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
-    chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
-     
-    chown system system /sys/devices/system/cpu/cpu4/cpufreq/scaling_setspeed
-    chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_setspeed
    
     #add for usb otg by lly
     chown system system /sys/bus/platform/drivers/usb20_otg/force_usb_mode
@@ -139,30 +99,6 @@ on boot
     chown system system /sys/devices/virtual/resume_reboot/resume_reboot/resume_reboot
     chmod 0664 /sys/devices/virtual/resume_reboot/resume_reboot/resume_reboot
 
-    #add for leds by huangjc
-    chown system system /sys/class/leds/net-green/brightness
-    chmod 0664 /sys/class/leds/net-green/brightness
-    chown system system /sys/class/leds/net-red/brightness
-    chmod 0664 /sys/class/leds/net-red/brightness
-    chown system system /sys/class/leds/led_r/brightness
-    chown system system /sys/class/leds/led_r/trigger
-    chown system system /sys/class/leds/led_r/timer
-    chmod 0664 /sys/class/leds/led_r/brightness
-    chmod 0664 /sys/class/leds/led_r/trigger
-    chmod 0664 /sys/class/leds/led_r/timer
-    chown system system /sys/class/leds/led_g/brightness
-    chown system system /sys/class/leds/led_g/trigger
-    chown system system /sys/class/leds/led_g/timer
-    chmod 0664 /sys/class/leds/led_g/brightness
-    chmod 0664 /sys/class/leds/led_g/trigger
-    chmod 0664 /sys/class/leds/led_g/timer
-    chown system system /sys/class/leds/led_b/brightness
-    chown system system /sys/class/leds/led_b/trigger
-    chown system system /sys/class/leds/led_b/timer
-    chmod 0664 /sys/class/leds/led_b/brightness
-    chmod 0664 /sys/class/leds/led_b/trigger
-    chmod 0664 /sys/class/leds/led_b/timer
-
     chown root system /sys/class/graphics/fb0/map
     chmod 0664 /sys/class/graphics/fb0/map
 
@@ -170,19 +106,6 @@ on boot
     chmod 0664 /sys/devices/virtual/display/HDMI/enable
     chmod 0664 /sys/devices/virtual/display/HDMI/mode
     chmod 0664 /sys/devices/virtual/display/HDMI/scale
-
-    #add for cts
-    chmod 0660 /sys/bus/platform/drivers/usb20_otg/dwc_otg_conn_en
-    chmod 0660 /sys/bus/platform/drivers/usb20_otg/force_usb_mode
-    chmod 0660 /sys/bus/platform/drivers/usb20_otg/vbus_status
-    chmod 0660 /sys/devices/platform/fb/graphics/fb5/enable
-    chmod 0660 /sys/devices/platform/fb/graphics/fb6/cursor
-    chmod 0660 /sys/devices/platform/fb/graphics/fb6/enable
-    chmod 0660 /sys/devices/platform/fb/graphics/fb7/enable
-    chmod 0660 /sys/devices/platform/fb/graphics/fb8/enable
-    chmod 0660 /sys/devices/platform/fb/graphics/fb9/enable
-    chmod 0660 /sys/devices/platform/fb/graphics/fb9/bits_per_pixel
-    chmod 0660 /sys/devices/platform/fb/graphics/fb9/win_property
 
     restorecon_recursive /dev/block/by-name/
     #for tee
