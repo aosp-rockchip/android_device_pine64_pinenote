@@ -1,8 +1,8 @@
 cc_binary {
-    name: "android.hardware.lights-service.rockchip",
+    name: "android.hardware.lights-service.pinenote",
     relative_install_path: "hw",
-    init_rc: ["lights-rockchip.rc"],
-    vintf_fragments: ["lights-rockchip.xml"],
+    init_rc: ["lights-pinenote.rc"],
+    vintf_fragments: ["lights-pinenote.xml"],
     vendor: true,
     shared_libs: [
         "libbase",

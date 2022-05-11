@@ -177,7 +177,7 @@ PRODUCT_PACKAGES += \
 # Light AIDL
 PRODUCT_PACKAGES += \
     android.hardware.lights \
-    android.hardware.lights-service.rockchip
+    android.hardware.lights-service.pinenote
 
 # Fastbootd HAL
 # TODO: develop a hal for GMS...
