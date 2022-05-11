@@ -97,4 +97,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
                 ro.build.shutdown_timeout=6 \
                 persist.enable_task_snapshots=false 
                 vendor.gralloc.disable_afbc=0 \
-                dalvik.vm.foreground-heap-growth-multiplier=2.0
+                dalvik.vm.foreground-heap-growth-multiplier=2.0 \
+                sys.use_fifo_ui=1
