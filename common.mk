@@ -433,9 +433,9 @@ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.logd.kernel=1
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/zmodem/rz:$(TARGET_COPY_OUT_VENDOR)/bin/rz \
-    $(LOCAL_PATH)/zmodem/sz:$(TARGET_COPY_OUT_VENDOR)/bin/sz \
-    $(LOCAL_PATH)/picocom/bin/picocom:$(TARGET_COPY_OUT_VENDOR)/bin/picocom
+    $(LOCAL_PATH)/bin/rz:$(TARGET_COPY_OUT_VENDOR)/bin/rz \
+    $(LOCAL_PATH)/bin/sz:$(TARGET_COPY_OUT_VENDOR)/bin/sz \
+    $(LOCAL_PATH)/bin/picocom:$(TARGET_COPY_OUT_VENDOR)/bin/picocom
 PRODUCT_PACKAGES += io
 endif
 
