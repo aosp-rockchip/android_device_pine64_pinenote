@@ -10,7 +10,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/eink_logo/standby_logo/standby.png:$(TARGET_COPY_OUT_VENDOR)/media/standby.png \
     $(LOCAL_PATH)/eink_logo/standby_logo/standby_lowpower.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_lowpower.png \
     $(LOCAL_PATH)/eink_logo/standby_logo/standby_charge.png:$(TARGET_COPY_OUT_VENDOR)/media/standby_charge.png \
-    $(LOCAL_PATH)/eink_logo/android_logo/bootanimation.zip:$(TARGET_COPY_OUT_ODM)/media/bootanimation.zip \
+    $(LOCAL_PATH)/eink_logo/android_logo/bootanimation.zip:$(TARGET_COPY_OUT_SYSTEM)/media/bootanimation.zip \
     $(LOCAL_PATH)/configs/android.software.eink.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.eink.xml
 
 # Apps
