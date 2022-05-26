@@ -2,6 +2,8 @@ on property:sys.boot_completed=1
     chown system system /sys/class/devfreq/ff400000.gpu/governor
     chown system system /sys/class/devfreq/ff400000.gpu/min_freq
     chown system system /sys/class/devfreq/ff400000.gpu/max_freq
+    stop adbd
+    start adbd
 
 on boot
     chown system system /sys/class/thermal/thermal_zone0/policy
@@ -16,6 +18,8 @@ on boot
 
     # reduce schedul time to improve io performance
     write /sys/kernel/debug/sched_features NO_ENERGY_AWARE
+    stop adbd
+    start adbd
 
 on init
     # Increased power consumption and CPU in exchange for memory
