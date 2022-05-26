@@ -165,12 +165,15 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 
 # Sepolicy
 PRODUCT_SEPOLICY_SPLIT := true
-BOARD_SEPOLICY_DIRS ?= \
+BOARD_SEPOLICY_DIRS := \
     device/pine64/pinenote/sepolicy/vendor
-#BOARD_PLAT_PUBLIC_SEPOLICY_DIR ?= device/pine64/pinenote/sepolicy/public
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR ?= \
     device/pine64/pinenote/private \
     device/pine64/pinenote/sepolicy
+
+BOARD_PLAT_PUBLIC_SEPOLICY_DIR := device/rockchip/rk356x/sepolicy_ebook_public
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR += device/rockchip/rk356x/sepolicy_ebook_system
+BOARD_SEPOLICY_DIRS += device/rockchip/rk356x/sepolicy_ebook
 
 # Enable VNDK Check for Android P (MUST after P)
 BOARD_VNDK_VERSION := current

@@ -54,8 +54,10 @@ allow init baseparameter_block_device:lnk_file { relabelto setattr };
 allow init vendor_file:file { execute open};
 allow init oemfs:dir { mounton };
 allow init mnt_vendor_file:dir { mounton };
+allow init sysfs_usb:file rw_file_perms;
 
 dontaudit init proc:file { write setattr };
 set_prop(init, vendor_system_public_prop)
 r_dir_file(init, nativetest_data_file)
 rw_rockchip_graphic_device(init)
+set_prop(init, debug_prop)
