@@ -25,7 +25,7 @@ include device/pine64/pinenote/BoardConfig.mk
 include device/pine64/pinenote/BoardConfigCommon.mk
 include device/pine64/pinenote/common.mk
 include device/pine64/pinenote/device.mk
-include packages/apps/Eink/SystemUI/EinkSystemUI.mk
+-include packages/apps/Eink/SystemUI/EinkSystemUI.mk
 -include device/pine64/pinenote-kernel/device-kernel.mk
 
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
