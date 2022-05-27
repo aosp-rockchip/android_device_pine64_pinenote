@@ -299,7 +299,7 @@ void Power::performanceBoost(bool on) {
 
 void Power::powerSave(bool on) {
     ALOGV("RK powersave Entered!");
-    sysfs_write(CPU_CLUST0_GOV_PATH, on?"powersave":"schedutil");
+    sysfs_write(CPU_CLUST0_GOV_PATH, on?"ondemand":"schedutil");
     sysfs_write((_gpu_path + "/governor").c_str(), on?"powersave":"simple_ondemand");
     sysfs_write(DMC_GOV_PATH, on?"l":"L");
 }
