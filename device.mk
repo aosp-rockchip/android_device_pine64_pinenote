@@ -15,8 +15,7 @@ PRODUCT_COPY_FILES += \
 
 # Apps
 PRODUCT_PACKAGES += \
-    NoNavigationBarModeGestural \
-    EinkSystemUI
+    NoNavigationBarModeGestural
 
 PRODUCT_PACKAGES += \
     displayd \
