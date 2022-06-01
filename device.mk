@@ -2,7 +2,7 @@ DEVICE_PACKAGE_OVERLAYS := $(LOCAL_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
-PRODUCT_KERNEL_CONFIG += rk356x_eink.config
+PRODUCT_KERNEL_CONFIG := pinenote_defconfig
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/eink_logo/poweroff_logo/poweroff.png:$(TARGET_COPY_OUT_VENDOR)/media/poweroff.png \
